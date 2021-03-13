@@ -1,5 +1,15 @@
 import React, { Fragment, useReducer, useEffect } from 'react';
 import styled from 'styled-components';
+// React Routerにおけるリンク
+import { Link } from "react-router-dom";
+
+// 新しいコンポーネント部分
+// components
+import Skeleton from '@material-ui/lab/Skeleton';
+
+// constants
+import { REQUEST_STATE } from '../constants';
+
 // apis
 import { fetchRestaurants } from '../apis/restaurants';
 
@@ -13,6 +23,7 @@ import {
 // images
 import MainLogo from '../images/logo.png';
 import MainCoverImage from '../images/main-cover-image.png';
+import RestaurantImage from '../images/restaurant-image.jpg';
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -30,6 +41,32 @@ const MainCoverImageWrapper = styled.div`
 
 const MainCover = styled.img`
   height: 600px;
+`;
+
+//レストラン一覧の全体　justify-content: space-around;で空間を空ける
+const RestaurantsContentsList = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 150px;
+`;
+//１つ１つのアイテム　絶対値を指定
+const RestaurantsContentWrapper = styled.div`
+  width: 450px;
+  height: 300px;
+  padding: 48px;
+`;
+const RestaurantsImageNode = styled.img`
+  width: 100%;
+`;
+
+const MainText = styled.p`
+  color: black;
+  font-size: 18px;
+`;
+
+const SubText = styled.p`
+  color: black;
+  font-size: 12px;
 `;
 
 export const Restaurants = () => {
@@ -56,13 +93,26 @@ export const Restaurants = () => {
       <MainCoverImageWrapper>
         <MainCover src={MainCoverImage} alt="main cover" />
       </MainCoverImageWrapper>
-      {
-        state.restaurantsList.map(restaurant =>
-          <div>
-            {restaurant.name}
-          </div>
-        )
-      }
+      <RestaurantsContentsList>
+        {
+          state.fetchState === REQUEST_STATE.LOADING ?
+            <Fragment>
+              <Skeleton variant="rect" width={450} height={300} />
+              <Skeleton variant="rect" width={450} height={300} />
+              <Skeleton variant="rect" width={450} height={300} />
+            </Fragment>
+            :
+            state.restaurantsList.map((item, index) =>
+              <Link to={`/restaurants/${item.id}/foods`} key={index} style={{ textDecoration: 'none' }}>
+                <RestaurantsContentWrapper>
+                  <RestaurantsImageNode src={RestaurantImage} />
+                  <MainText>{item.name}</MainText>
+                  <SubText>{`配送料：${item.fee}円 ${item.time_required}分`}</SubText>
+                </RestaurantsContentWrapper>
+              </Link>
+            )
+        }
+      </RestaurantsContentsList>
     </Fragment>
   )
 }

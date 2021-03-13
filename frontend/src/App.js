@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -15,21 +14,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        // 店舗一覧ページ
-      <Route
+        <Route
           exact
           path="/restaurants">
           <Restaurants />
         </Route>
-      // フード一覧ページ
-      <Route
-          exact
-          path="/foods"
-        >
-          <Foods />
-        </Route>
-      // 注文ページ
-      <Route
+        <Route
           exact
           path="/orders">
           <Orders />
