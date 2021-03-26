@@ -9,6 +9,8 @@ import {
   lineFoodsReducers,
 } from '../reducers/lineFoods';
 
+import { postOrder } from '../apis/order'
+
 export const Orders = () => {
   const [state, dispatch] = useReducer(lineFoodReducer, initialState);
 
@@ -25,6 +27,16 @@ export const Orders = () => {
       )
       .catch((e) => console.error(e));
   }, []);
+
+  const postLineFoods = () => {
+    dispatch({ type: lineFoodsActionTypes.POSTING });
+    postOrder({
+      line_food_ids: state.lineFoodsSummary.line_food_ids,
+    }).then(() => {
+      dispatch({ type: lineFoodsActionTypes.POSTING_SUCCESS });
+      window.location.reload();
+    });
+  };
 
   return (
     <Fragment>
